@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专用加密工具 - 上海精诚医疗器械有限公司</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color-start: #e9eff5;
+            --bg-color-end: #f7f9fc;
+            --bg-overlay-color: rgba(240, 244, 248, 0.85);
+            --card-bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --subtle-text-color: #5a6a7a;
+            --primary-color: #3498db;
+            --primary-hover-color: #2980b9;
+            --result-bg-color: #ecf5ff;
+            --result-text-color: #2c3e50;
+            --shadow-color: rgba(52, 152, 219, 0.15);
+            --border-color: #dfe6ee;
+            --theme-icon: "☀️";
+        }
+
+        html.dark-mode {
+            --bg-color-start: #2c3e50;
+            --bg-color-end: #233140;
+            --bg-overlay-color: rgba(35, 49, 64, 0.9);
+            --card-bg-color: #34495e;
+            --text-color: #ecf0f1;
+            --subtle-text-color: #95a5a6;
+            --primary-color: #5dade2;
+            --primary-hover-color: #85c1e9;
+            --result-bg-color: #2c3e50;
+            --result-text-color: #ffffff;
+            --shadow-color: rgba(93, 173, 226, 0.1);
+            --border-color: #465a70;
+            --theme-icon: "🌙";
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Roboto', sans-serif;
+            background-image: url('https://i.imgur.com/Zign67t.jpeg');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px 15px;
+            box-sizing: border-box;
+            transition: color 0.4s;
+            position: relative;
+            z-index: 1;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-overlay-color);
+            z-index: -1;
+            transition: background-color 0.4s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+        
+        .subtitle {
+            font-size: 0.9em;
+            font-weight: 400;
+            color: var(--subtle-text-color);
+            margin: 0 0 30px 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 2.5em;
+            text-align: center;
+            border: none;
+            border-bottom: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            letter-spacing: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        input[type="text"]::placeholder {
+             color: var(--subtle-text-color);
+             opacity: 0.5;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-bottom-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2em;
+            font-weight: 500;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+        button:hover {
+            background: var(--primary-hover-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        #result-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--result-bg-color);
+            color: var(--result-text-color);
+            border-radius: 12px;
+            min-height: 40px;
+            font-size: 2.5em;
+            font-weight: 700;
+            letter-spacing: 10px;
+            word-wrap: break-word;
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+            transition: all 0.3s;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        #error-message {
+            color: #e74c3c;
+            margin-top: 15px;
+            min-height: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        details {
+            margin: 0;
+            text-align: left;
+        }
+        summary {
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px;
+            color: var(--text-color);
+            list-style: none;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        summary:hover {
+            background-color: var(--result-bg-color);
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before {
+            content: '›';
+            font-weight: 700;
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin-right: 10px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .details-content {
+            padding: 15px 15px 5px 15px;
+            color: var(--subtle-text-color);
+            line-height: 1.8;
+            border-top: 1px solid var(--border-color);
+        }
+        .details-content ol {
+            margin: 0;
+            padding-left: 25px;
+        }
+        
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-bg-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            font-size: 1.5em;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+        .theme-switcher:hover {
+             transform: rotate(15deg) scale(1.1);
+        }
+        .theme-switcher::after {
+            content: var(--theme-icon);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="theme-switcher" onclick="toggleTheme()" title="切换主题"></div>
+
+<div class="container">
+    <div class="card">
+        <h1>体外冲击波碎石机</h1>
+        <p class="subtitle">上海精诚医疗器械有限公司 · 专用加密工具</p>
+        <input type="text" id="inputCode" placeholder="••••••" maxlength="6">
+        <button onclick="performEncryption()">生成验证码</button>
+        <div id="error-message"></div>
+        <div id="result-container"></div>
+    </div>
+
+    <div class="card">
+        <details>
+            <summary>使用说明</summary>
+            <div class="details-content">
+                <ol>
+                    <li>在上方输入框内，输入6位数字的“生成码”。</li>
+                    <li>点击“生成验证码”按钮。</li>
+                    <li>加密后的“验证码”将显示在下方的结果区域。</li>
+                    <li>本工具为纯前端实现，所有计算均在您的设备上完成，确保数据安全。</li>
+                </ol>
+            </div>
+        </details>
+    </div>
+</div>
+
+<script>
+    // --- 主加密逻辑 ---
+    function encryptCode(inputCode) {
+        const key = [7, 2, 9, 4, 6, 3];
+        const inputDigits = inputCode.split('').map(Number);
+        
+        const temp = inputDigits.map((digit, i) => (digit + (i + 1)) % 10);
+        const reversed = [...temp].reverse();
+        const encrypted = reversed.map((digit, i) => (digit ^ key[i]) % 10);
+
+        return encrypted.join('');
+    }
+
+    // --- 界面交互 ---
+    function performEncryption() {
+        const inputElement = document.getElementById('inputCode');
+        const resultContainer = document.getElementById('result-container');
+        const errorMessage = document.getElementById('error-message');
+        
+        const inputCode = inputElement.value;
+        
+        resultContainer.textContent = '';
+        errorMessage.textContent = '';
+        resultContainer.style.animation = 'none';
+
+        if (!/^\d{6}$/.test(inputCode)) {
+            errorMessage.textContent = '错误：请输入完整的6位数字。';
+            return;
+        }
+
+        const result = encryptCode(inputCode);
+        resultContainer.textContent = result;
+        // 重新触发动画
+        void resultContainer.offsetWidth; 
+        resultContainer.style.animation = 'fadeIn 0.5s';
+    }
+    
+    document.getElementById('inputCode').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            performEncryption();
+        }
+    });
+
+    // --- 主题切换逻辑 ---
+    const themeSwitcher = document.querySelector('.theme-switcher');
+    const htmlElement = document.documentElement;
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            htmlElement.classList.add('dark-mode');
+        } else {
+            htmlElement.classList.remove('dark-mode');
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+        const currentTheme = htmlElement.classList.contains('dark-mode') ? 'dark' : 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    }
+
+    // 初始化主题
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        applyTheme('light'); // 默认使用浅色主题
+    }
+</script>
+
+</body>
+</html> 

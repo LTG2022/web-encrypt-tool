@@ -266,6 +266,19 @@
 </div>
 
 <script>
+    // --- 密码验证逻辑 ---
+    function checkPassword() {
+        const correctPassword = '4997';
+        const enteredPassword = prompt('请输入访问密码:', '');
+
+        if (enteredPassword !== correctPassword) {
+            alert('密码错误！');
+            document.body.innerHTML = '<h1 style="text-align:center; margin-top: 50px; color: var(--text-color);">访问受限</h1>';
+            return false;
+        }
+        return true;
+    }
+
     // --- 主加密逻辑 ---
     function encryptCode(inputCode) {
         const key = [7, 2, 9, 4, 6, 3];
@@ -335,6 +348,11 @@
         applyTheme(savedTheme);
     } else {
         applyTheme('light'); // 默认使用浅色主题
+    }
+
+    // 页面加载时执行密码检查
+    if (!checkPassword()) {
+        // 如果密码错误，不执行任何其他操作
     }
 </script>
 

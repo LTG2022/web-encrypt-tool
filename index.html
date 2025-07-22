@@ -1,13 +1,16 @@
-<!-- Force redeploy -->
+<!-- Force redeploy v2 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>专用加密工具 - 上海精诚医疗器械有限公司</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-color-start: #e9eff5;
@@ -59,11 +62,14 @@
             position: relative;
             z-index: 1;
         }
-        
+
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: var(--bg-overlay-color);
             z-index: -1;
             transition: background-color 0.4s;
@@ -84,13 +90,13 @@
             transition: all 0.4s;
             text-align: center;
         }
-        
+
         h1 {
             font-size: 1.6em;
             font-weight: 700;
             margin: 0 0 5px 0;
         }
-        
+
         .subtitle {
             font-size: 0.9em;
             font-weight: 400;
@@ -113,10 +119,12 @@
             box-sizing: border-box;
             transition: all 0.3s;
         }
+
         input[type="text"]::placeholder {
-             color: var(--subtle-text-color);
-             opacity: 0.5;
+            color: var(--subtle-text-color);
+            opacity: 0.5;
         }
+
         input[type="text"]:focus {
             outline: none;
             border-bottom-color: var(--primary-color);
@@ -135,6 +143,7 @@
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
         }
+
         button:hover {
             background: var(--primary-hover-color);
             transform: translateY(-3px);
@@ -157,8 +166,18 @@
             transition: all 0.3s;
             animation: fadeIn 0.5s;
         }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         #error-message {
             color: #e74c3c;
@@ -172,6 +191,7 @@
             margin: 0;
             text-align: left;
         }
+
         summary {
             font-size: 1.1em;
             font-weight: 500;
@@ -182,10 +202,15 @@
             border-radius: 8px;
             transition: background-color 0.2s;
         }
+
         summary:hover {
             background-color: var(--result-bg-color);
         }
-        summary::-webkit-details-marker { display: none; }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
         summary::before {
             content: '›';
             font-weight: 700;
@@ -195,6 +220,7 @@
             display: inline-block;
             transition: transform 0.2s;
         }
+
         details[open] summary::before {
             transform: rotate(90deg);
         }
@@ -205,11 +231,12 @@
             line-height: 1.8;
             border-top: 1px solid var(--border-color);
         }
+
         .details-content ol {
             margin: 0;
             padding-left: 25px;
         }
-        
+
         .theme-switcher {
             position: fixed;
             top: 20px;
@@ -227,134 +254,270 @@
             border: 1px solid var(--border-color);
             transition: all 0.3s;
         }
+
         .theme-switcher:hover {
-             transform: rotate(15deg) scale(1.1);
+            transform: rotate(15deg) scale(1.1);
         }
+
         .theme-switcher::after {
             content: var(--theme-icon);
         }
 
+        /* --- 新增：登录界面样式 --- */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-overlay-color);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease-out;
+            opacity: 1;
+        }
+
+        #login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .login-box {
+            background-color: var(--card-bg-color);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-box.error-shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-8px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(8px);
+            }
+        }
+
+        .login-box h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.8em;
+            color: var(--text-color);
+        }
+
+        .login-box p {
+            margin: 0 0 30px 0;
+            color: var(--subtle-text-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--subtle-text-color);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--result-bg-color);
+            color: var(--text-color);
+            font-size: 1.1em;
+            box-sizing: border-box;
+        }
+
+        .input-group input[readonly] {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        #login-error {
+            color: #e74c3c;
+            min-height: 20px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="theme-switcher" onclick="toggleTheme()" title="切换主题"></div>
-
-<div class="container">
-    <div class="card">
-        <h1>体外冲击波碎石机</h1>
-        <p class="subtitle">上海精诚医疗器械有限公司 · 专用加密工具</p>
-        <input type="text" id="inputCode" placeholder="••••••" maxlength="6">
-        <button onclick="performEncryption()">生成验证码</button>
-        <div id="error-message"></div>
-        <div id="result-container"></div>
+    <div id="login-overlay">
+        <div class="login-box" id="login-box">
+            <h2>上海精诚医疗器械有限公司</h2>
+            <p>专用工具登录</p>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" value="JCYL" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" placeholder="请输入密码" required>
+                </div>
+                <div id="login-error"></div>
+                <button type="submit">授权登录</button>
+            </form>
+        </div>
     </div>
 
-    <div class="card">
-        <details>
-            <summary>使用说明</summary>
-            <div class="details-content">
-                <ol>
-                    <li>在上方输入框内，输入6位数字的“生成码”。</li>
-                    <li>点击“生成验证码”按钮。</li>
-                    <li>加密后的“验证码”将显示在下方的结果区域。</li>
-                    <li>本工具为纯前端实现，所有计算均在您的设备上完成，确保数据安全。</li>
-                </ol>
-            </div>
-        </details>
+    <div class="theme-switcher" onclick="toggleTheme()" title="切换主题"></div>
+
+    <div class="container">
+        <div class="card">
+            <h1>体外冲击波碎石机</h1>
+            <p class="subtitle">上海精诚医疗器械有限公司 · 专用加密工具</p>
+            <input type="text" id="inputCode" placeholder="••••••" maxlength="6">
+            <button onclick="performEncryption()">生成验证码</button>
+            <div id="error-message"></div>
+            <div id="result-container"></div>
+        </div>
+
+        <div class="card">
+            <details>
+                <summary>使用说明</summary>
+                <div class="details-content">
+                    <ol>
+                        <li>在上方输入框内，输入6位数字的“生成码”。</li>
+                        <li>点击“生成验证码”按钮。</li>
+                        <li>加密后的“验证码”将显示在下方的结果区域。</li>
+                        <li>本工具为纯前端实现，所有计算均在您的设备上完成，确保数据安全。</li>
+                    </ol>
+                </div>
+            </details>
+        </div>
     </div>
-</div>
 
-<script>
-    // --- 密码验证逻辑 ---
-    function checkPassword() {
-        const correctPassword = '4997';
-        const enteredPassword = prompt('请输入访问密码:', '');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginOverlay = document.getElementById('login-overlay');
+            const loginBox = document.getElementById('login-box');
+            const loginForm = document.getElementById('login-form');
+            const passwordInput = document.getElementById('password');
+            const loginError = document.getElementById('login-error');
 
-        if (enteredPassword !== correctPassword) {
-            alert('密码错误！');
-            document.body.innerHTML = '<h1 style="text-align:center; margin-top: 50px; color: var(--text-color);">访问受限</h1>';
-            return false;
-        }
-        return true;
-    }
+            loginForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const correctPassword = '4997';
 
-    // --- 主加密逻辑 ---
-    function encryptCode(inputCode) {
-        const key = [7, 2, 9, 4, 6, 3];
-        const inputDigits = inputCode.split('').map(Number);
-        
-        const temp = inputDigits.map((digit, i) => (digit + (i + 1)) % 10);
-        const reversed = [...temp].reverse();
-        const encrypted = reversed.map((digit, i) => (digit ^ key[i]) % 10);
+                loginError.textContent = '';
+                loginBox.classList.remove('error-shake');
 
-        return encrypted.join('');
-    }
+                if (passwordInput.value === correctPassword) {
+                    loginOverlay.classList.add('hidden');
+                } else {
+                    loginError.textContent = '密码错误，请重试。';
+                    loginBox.classList.add('error-shake');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            });
+        });
 
-    // --- 界面交互 ---
-    function performEncryption() {
-        const inputElement = document.getElementById('inputCode');
-        const resultContainer = document.getElementById('result-container');
-        const errorMessage = document.getElementById('error-message');
-        
-        const inputCode = inputElement.value;
-        
-        resultContainer.textContent = '';
-        errorMessage.textContent = '';
-        resultContainer.style.animation = 'none';
+        // --- 主加密逻辑 ---
+        function encryptCode(inputCode) {
+            const key = [7, 2, 9, 4, 6, 3];
+            const inputDigits = inputCode.split('').map(Number);
 
-        if (!/^\d{6}$/.test(inputCode)) {
-            errorMessage.textContent = '错误：请输入完整的6位数字。';
-            return;
+            const temp = inputDigits.map((digit, i) => (digit + (i + 1)) % 10);
+            const reversed = [...temp].reverse();
+            const encrypted = reversed.map((digit, i) => (digit ^ key[i]) % 10);
+
+            return encrypted.join('');
         }
 
-        const result = encryptCode(inputCode);
-        resultContainer.textContent = result;
-        // 重新触发动画
-        void resultContainer.offsetWidth; 
-        resultContainer.style.animation = 'fadeIn 0.5s';
-    }
-    
-    document.getElementById('inputCode').addEventListener('keyup', function(event) {
-        if (event.key === 'Enter') {
-            performEncryption();
+        // --- 界面交互 ---
+        function performEncryption() {
+            const inputElement = document.getElementById('inputCode');
+            const resultContainer = document.getElementById('result-container');
+            const errorMessage = document.getElementById('error-message');
+
+            const inputCode = inputElement.value;
+
+            resultContainer.textContent = '';
+            errorMessage.textContent = '';
+            resultContainer.style.animation = 'none';
+
+            if (!/^\d{6}$/.test(inputCode)) {
+                errorMessage.textContent = '错误：请输入完整的6位数字。';
+                return;
+            }
+
+            const result = encryptCode(inputCode);
+            resultContainer.textContent = result;
+            // 重新触发动画
+            void resultContainer.offsetWidth;
+            resultContainer.style.animation = 'fadeIn 0.5s';
         }
-    });
 
-    // --- 主题切换逻辑 ---
-    const themeSwitcher = document.querySelector('.theme-switcher');
-    const htmlElement = document.documentElement;
+        document.getElementById('inputCode').addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+                performEncryption();
+            }
+        });
 
-    function applyTheme(theme) {
-        if (theme === 'dark') {
-            htmlElement.classList.add('dark-mode');
+        // --- 主题切换逻辑 ---
+        const themeSwitcher = document.querySelector('.theme-switcher');
+        const htmlElement = document.documentElement;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.classList.add('dark-mode');
+            } else {
+                htmlElement.classList.remove('dark-mode');
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = htmlElement.classList.contains('dark-mode') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        // 初始化主题
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme) {
+            applyTheme(savedTheme);
         } else {
-            htmlElement.classList.remove('dark-mode');
+            applyTheme('light'); // 默认使用浅色主题
         }
-        localStorage.setItem('theme', theme);
-    }
-
-    function toggleTheme() {
-        const currentTheme = htmlElement.classList.contains('dark-mode') ? 'dark' : 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        applyTheme(newTheme);
-    }
-
-    // 初始化主题
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (savedTheme) {
-        applyTheme(savedTheme);
-    } else {
-        applyTheme('light'); // 默认使用浅色主题
-    }
-
-    // 页面加载时执行密码检查
-    if (!checkPassword()) {
-        // 如果密码错误，不执行任何其他操作
-    }
-</script>
+    </script>
 
 </body>
-</html> 
+
+</html>
